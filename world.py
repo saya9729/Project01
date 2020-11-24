@@ -1,7 +1,7 @@
 import population
 import seeker
 import brain
-class world
+class world:
     gen=0
     world_best_score=0
     best_brain=[]
@@ -44,6 +44,3 @@ class world
                 max=this.species[i].global_best_fitness
                 max_index=i
         this.world_best_score=this.species[max_index].global_best
-
-    def save_best_seeker(this,species_no):
-        

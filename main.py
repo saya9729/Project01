@@ -1,4 +1,4 @@
-
+import world
 
 
 
@@ -13,4 +13,18 @@ for i in range(n):
     for j in range(m):
         map[i][j] = int(line[i + 1].split()[j])
 
+global_mutation_rate=0.01
+vision_radius=3
 
+World=world.world(5,2000)
+
+def draw():
+    draw_data()
+
+    if not World.done():
+        World.update()
+    else:
+        World.genetic_algorithm()
+
+def draw_data():
+    #minh xu ly ho

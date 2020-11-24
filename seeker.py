@@ -1,6 +1,5 @@
 import brain
 import main
-vision_radius=3
 
 class seeker:
     dead = False
@@ -12,12 +11,12 @@ class seeker:
     step_to_go=100
     next_step=0
     movement=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,-1]]
-    for i in range((2 * vision_radius + 1) ** 2 + 1):
+    for i in range((2 * main.vision_radius + 1) ** 2 + 1):
         vision.append(-1)
 
     def __init__(this, x, y):
         this.location = [x, y]
-        this.Brain=brain.neural_network((2 * vision_radius + 1) ** 2 + 1,25,8)
+        this.Brain=brain.neural_network((2 * main.vision_radius + 1) ** 2 + 1,25,8)
         this.step_to_go=100
 
     def mutate(this):

@@ -1,6 +1,7 @@
 import seeker
 import math
 import random
+import main
 
 
 class population:
@@ -41,7 +42,7 @@ class population:
 
             this.child = this.parent_1.crossover(this.parent_2)
 
-            this.child.mutate(this.global_mutation_rate)
+            this.child.mutate(main.global_mutation_rate)
 
             this.new.append(this.child)
         this.Seeker = this.new
