@@ -39,7 +39,7 @@ class neural_network:
         return this.child
 
     def clone(this):
-        this.clone = neural_network.(this.Input, this.Hidden, this.Output)
+        this.clone = neural_network(this.Input, this.Hidden, this.Output)
         this.clone.input_matrix = this.input_matrix.clone()
         this.clone.hidden_matrix = this.hidden_matrix.clone()
         this.clone.output_matrix = this.output_matrix.clone()
