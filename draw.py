@@ -122,5 +122,5 @@ while running:
     tilemap(screenWidth, screenHeight)
     seeker(seeker_x, seeker_y)
     hider(hider_x, hider_y)
-    # time.sleep(0.1)
+    time.sleep(0.1)
     pygame.display.update()
