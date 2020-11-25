@@ -15,7 +15,8 @@ for i in range(n):
 
 global_mutation_rate=0.01
 vision_radius=3
-
+hint_interval=5
+hint_radius=3
 World=world.world(5,2000)
 
 def draw():
