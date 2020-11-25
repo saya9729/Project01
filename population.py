@@ -14,7 +14,7 @@ class population:
     current_best_fitness = 0
 
     global_best_seeker = seeker.seeker(0, 0)
-    population_id = math.floor(random.uniform(0, 10000))
+    population_id = math.floor(random.uniform(0, 1000000))
 
     def __init__(this, size):
         for i in range(size):
@@ -23,9 +23,10 @@ class population:
 
     def update(this):
         for i in range(len(this.Seeker)):
-            this.Seeker[i].look()
-            this.Seeker[i].set_direction()
-            this.Seeker[i].move()
+            if not this.Seeker[i].dead:
+                this.Seeker[i].look()
+                this.Seeker[i].set_direction()
+                this.Seeker[i].move()
         this.set_best_seeker()
 
     def cal_fitness(this):

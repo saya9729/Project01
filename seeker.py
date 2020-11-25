@@ -1,6 +1,5 @@
 import brain
 import main
-import math
 
 
 class seeker:
@@ -32,8 +31,8 @@ class seeker:
         this.Brain = brain.neural_network(main.m*main.n, 25, 8)
         this.step_to_go = 100
 
-    def mutate(this):
-        this.Brain.mutate()
+    def mutate(this,rate):
+        this.Brain.mutate(rate)
 
     def set_direction(this):
         this.decision = this.Brain.output(this.vision)
@@ -70,7 +69,7 @@ class seeker:
             this.dead=True
 
     def look(this):
-        if abs(this.seeker_loc[0] - this.hider_loc[0]) > 3 or abs(this.seeker_loc[1] - this.hider_loc[1]) > 3:
+        if abs(this.seeker_loc[0] - this.hider_loc[0]) > main.vision_radius or abs(this.seeker_loc[1] - this.hider_loc[1]) > main.vision_radius:
             return
         if this.seeker_loc[0] > this.hider_loc[0]:
             x_max = this.seeker_loc[0]
@@ -104,3 +103,8 @@ class seeker:
         this.vision[this.hider_loc[0] * main.m + this.hider_loc[1]] = 2
     def cal_fitness(this):
         return this.step_to_go+20 if this.caught else 0
+
+    def save_seeker(this, seeker_id,score,pop_id):
+        file=open("data/seeker_no_"+seeker_id+".txt","w")
+        print(score,pop_id,file=file)
+        #later lol :v
