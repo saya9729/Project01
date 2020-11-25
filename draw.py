@@ -1,27 +1,32 @@
 import pygame
 import math
 import time
+import main
+import random
 # intialize the pygame
 pygame.init()
 
 # global variables
 
-screenWidth = 15 # the number of tile in x axis
-screenHeight = 11 # the number of tile in y axis
+# screenWidth = main.m # the number of tile in x axis
+# screenHeight = main.n # the number of tile in y axis
+screenWidth = 48 # the number of tile in x axis
+screenHeight = 24 # the number of tile in y axis
+
 speed = 1
 
 # create the screen
-screen = pygame.display.set_mode((screenWidth*64, screenHeight*64))
+screen = pygame.display.set_mode((screenWidth*32, screenHeight*32))
 
 
 # title and icon
 pygame.display.set_caption("H&S")
-icon = pygame.image.load('H&S.png')
+icon = pygame.image.load('picture/H&S.png')
 pygame.display.set_icon(icon)
 
 
 # seeker  
-seeker_img = pygame.image.load('dragon.png')
+seeker_img = pygame.transform.scale(pygame.image.load('picture/warrior.png'),(32, 32))
 seeker_x = 4
 seeker_y = 4
 seeker_y_change = speed
@@ -30,7 +35,7 @@ seeker_x_change = speed
 
 # show the seeker image on screen
 def seeker(x, y):
-    screen.blit(seeker_img, (x*64, y*64))
+    screen.blit(seeker_img, (x*32, y*32))
 
 
 # seeker border reflex
@@ -51,7 +56,7 @@ def seeker_border_reflex(seeker_x, seeker_y, seeker_x_change, seeker_y_change):
 
 
 # hider
-hider_img = pygame.image.load('warrior.png')
+hider_img =pygame.transform.scale(pygame.image.load('picture/dragon.png'),(32, 32))
 hider_x = 4
 hider_y = 3
 hider_y_change = speed
@@ -60,7 +65,7 @@ hider_x_change = speed
 
 # show the hider image on screen
 def hider(x, y):
-    screen.blit(hider_img, (x*64, y*64))
+    screen.blit(hider_img, (x*32, y*32))
 
 
 # hider border reflex
@@ -87,40 +92,81 @@ def is_collision(seeker_x, seeker_y, hider_x, hider_y):
 
 
 # the tile map
-tile_img = pygame.image.load('square.png')
+tile_img = pygame.transform.scale(pygame.image.load('picture/square.png'),(32, 32))
 
+# wall
+wall_1_img = pygame.transform.scale(pygame.image.load('picture/gemswall1.png'),(32, 32))
+wall_2_img = pygame.transform.scale(pygame.image.load('picture/gemswall2.png'),(32, 32))
+wall_3_img = pygame.transform.scale(pygame.image.load('picture/gemswall3.png'),(32, 32))
+wall_4_img = pygame.transform.scale(pygame.image.load('picture/gemswall4.png'),(32, 32))
+
+# border
+border_1_img = pygame.transform.scale(pygame.image.load('picture/border1.png'),(32, 32))
+border_2_img = pygame.transform.scale(pygame.image.load('picture/border2.png'),(32, 32))
+border_3_img = pygame.transform.scale(pygame.image.load('picture/border3.png'),(32, 32))
+border_4_img = pygame.transform.scale(pygame.image.load('picture/border4.png'),(32, 32))
 
 # map function
 def tilemap(tile_x, tile_y):
     for i in range(tile_x):
         for j in range(tile_y):
-            screen.blit(tile_img, (i*64, j*64))
+            screen.blit(tile_img, (i*32, j*32))
 
 
+# backgrounds
+paper_img = pygame.transform.scale(pygame.image.load('picture/paper.jpg'),(screenWidth*32, screenHeight*32))
+game_over_img = pygame.transform.scale(pygame.image.load('picture/game_over.png'),(screenWidth*32, screenHeight*32))
+menu_img = pygame.transform.scale(pygame.image.load('picture/menu.png'),(screenWidth*32, screenHeight*32))
+hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'),(32, 32))
 
 # game loop
-running = True
-while running:
+def draw_data(m,n):
+    running = True
+    while running:
+        # RGB-color
 
-    # RGB-color
-    screen.fill((255, 255, 255))
+        screen.fill((255, 255, 255))
+        # background print
+        screen.blit(paper_img, (0, 0))
+        time.sleep(0.1)
+        for i in range(m):
+            for j in range(n):
+                if(main.map[i][j]==0):
+                    screen.blit(tile_img,(i*32,j*32))
+                elif (main.map[i][j]==1):
+                    rand=math.floor(random.uniform(0,4))
+                    if rand==0:
+                        screen.blit(wall_1_img, (i * 32, j * 32))
+                    if rand==1:
+                        screen.blit(wall_2_img, (i * 32, j * 32))
+                    if rand==2:
+                        screen.blit(wall_3_img, (i * 32, j * 32))
+                    if rand==3:
+                        screen.blit(wall_4_img, (i * 32, j * 32))
+
+                elif    (main.map[i][j]==2):
+                    screen.blit(hider_img,(i*32,j*32))
+                elif    (main.map[i][j]==3):
+                    screen.blit(seeker_img,(i*32,j*32))
+                elif     (main.map[i][j]==4):
+                    screen.blit(hint_img,(i*32,j*32))
+                elif (main.map[i][j]==5):
+                    rand=math.floor(random.uniform(0,4))
+                    if rand==0:
+                        screen.blit(border_1_img, (i * 32, j * 32))
+                    if rand==1:
+                        screen.blit(border_2_img, (i * 32, j * 32))
+                    if rand==2:
+                        screen.blit(border_3_img, (i * 32, j * 32))
+                    if rand==3:
+                        screen.blit(border_4_img, (i * 32, j * 32))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
 
-    # edge border for seeker and hider
-    hider_x, hider_y, hider_x_change, hider_y_change = hider_border_reflex(hider_x, hider_y, hider_x_change, hider_y_change)
-    seeker_x, seeker_y, seeker_x_change, seeker_y_change = seeker_border_reflex(seeker_x, seeker_y, seeker_x_change, seeker_y_change)
+
+#  runing game
 
 
-    # check the collision
-    collision = is_collision(seeker_x, seeker_y, hider_x, hider_y)
-    if collision:
-        running = False
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    tilemap(screenWidth, screenHeight)
-    seeker(seeker_x, seeker_y)
-    hider(hider_x, hider_y)
-    time.sleep(0.1)
-    pygame.display.update()
