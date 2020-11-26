@@ -29,7 +29,7 @@ class seeker:
                 if main.map[i][j] == 3:
                     this.seeker_loc = [x, y]
 
-        this.Brain = brain.neural_network(main.m*main.n, 25, 8)
+        this.Brain = brain.neural_network(main.m * main.n, 25, 8)
         this.step_to_go = 100
 
     def mutate(this,rate):
@@ -103,7 +103,7 @@ class seeker:
     def update_vision(this):
         this.vision[this.hider_loc[0] * main.m + this.hider_loc[1]] = 2
         if this.step_to_go%main.hint_interval==0:
-            hint_loc=[this.hider_loc[0]+math.floor(random.uniform(0,main.hint_radius)),this.hider_loc[1]+math.floor(random.uniform(0,main.hint_radius))]
+            hint_loc=[this.hider_loc[0] + math.floor(random.uniform(0, main.hint_radius)), this.hider_loc[1] + math.floor(random.uniform(0, main.hint_radius))]
             if hint_loc[0]<0:
                 hint_loc[0]=0
             if hint_loc[0]>=main.n:

@@ -1,7 +1,7 @@
 import pygame
 import math
 import time
-import main
+# import main
 import random
 # intialize the pygame
 pygame.init()
@@ -133,7 +133,7 @@ def draw_data(m,n):
             for j in range(n):
                 if(main.map[i][j]==0):
                     screen.blit(tile_img,(i*32,j*32))
-                elif (main.map[i][j]==1):
+                elif (main.map[i][j] == 1):
                     rand=math.floor(random.uniform(0,4))
                     if rand==0:
                         screen.blit(wall_1_img, (i * 32, j * 32))
@@ -144,13 +144,13 @@ def draw_data(m,n):
                     if rand==3:
                         screen.blit(wall_4_img, (i * 32, j * 32))
 
-                elif    (main.map[i][j]==2):
+                elif    (main.map[i][j] == 2):
                     screen.blit(hider_img,(i*32,j*32))
-                elif    (main.map[i][j]==3):
+                elif    (main.map[i][j] == 3):
                     screen.blit(seeker_img,(i*32,j*32))
-                elif     (main.map[i][j]==4):
+                elif     (main.map[i][j] == 4):
                     screen.blit(hint_img,(i*32,j*32))
-                elif (main.map[i][j]==5):
+                elif (main.map[i][j] == 5):
                     rand=math.floor(random.uniform(0,4))
                     if rand==0:
                         screen.blit(border_1_img, (i * 32, j * 32))

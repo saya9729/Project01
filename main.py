@@ -2,6 +2,7 @@
 import draw
 import pygame
 
+
 pygame.init()
 # input data-------------------------
 
@@ -19,7 +20,7 @@ global_mutation_rate=0.01
 vision_radius=3
 hint_interval=5
 hint_radius=3
-# World=world.world(5,2000)
+# World=world.world(5,2000)AA
 
 # def draw():
 #     draw.draw_data()
@@ -29,4 +30,4 @@ hint_radius=3
 #     else:
 #         World.genetic_algorithm()
 
-draw.draw_data(m,n)
+draw.draw_data(m, n)
