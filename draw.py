@@ -2,6 +2,7 @@ import pygame
 import math
 import time
 import random
+import Seeker
 
 # intialize the pygame
 pygame.init()
@@ -123,6 +124,8 @@ hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32
 # game loop
 def draw_data(n, m, map):
     running = True
+    seeker = Seeker.Seeker(n, m, map)
+    seeker.update_seen()
     while running:
         # RGB-color
 
@@ -130,6 +133,9 @@ def draw_data(n, m, map):
         # background print
         screen.blit(paper_img, (0, 0))
         time.sleep(0.1)
+        seeker.look()
+        seeker.set_direction()
+        seeker.move()
         for i in range(n):
             for j in range(m):
                 if (map[i][j] == 0):
