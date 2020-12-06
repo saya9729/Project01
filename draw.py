@@ -3,6 +3,8 @@ import math
 import time
 import random
 import Seeker
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
 # intialize the pygame
 mainClock = pygame.time.Clock()
@@ -134,7 +136,7 @@ game_win_img = pygame.transform.scale(pygame.image.load('picture/menu.png'),
                                        (screenWidth * 32, screenHeight * 32))
 menu_img = pygame.transform.scale(pygame.image.load('picture/witchermenu.png'), (screenWidth * 32, screenHeight * 32))
 hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32))
-
+load_img = pygame.transform.scale(pygame.image.load('picture/warrior.png'), (64, 64))
 
 # game loop
 def Print_score(x, y, size, color, score):
@@ -195,8 +197,9 @@ def menu():
         button_4 = pygame.Rect(930, 195, 60, 60)
         button_5 = pygame.Rect(980, 380, 60, 60)
         button_6 = pygame.Rect(630, 250, 300, 350)
+        button_7 = pygame.Rect(740, 680, 60, 60)
 
-
+        screen.blit(load_img, button_7)
 
         #pygame.draw.rect(screen,(255,0,0),button_6)
 
@@ -248,6 +251,14 @@ def menu():
             if click:
                 pygame.quit()
                 sys.exit()
+                # load button
+        if button_7.collidepoint((mx, my)):
+            time.sleep(0.1)
+            draw_text('Load File', font_2, (255, 255, 255), screen, 690, 630)
+            if click:
+                Tk().withdraw()
+                filename = askopenfilename()
+                if (filename): Load_map(filename)
 
         click = False
         for event in pygame.event.get():
