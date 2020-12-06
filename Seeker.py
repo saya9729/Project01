@@ -11,12 +11,11 @@ class Seeker:
     c_coeff = 0.0
     hide_value = 0.6324
     vision_radius = 3
-    score = 100
+    score = 20
     hider = []
     nearest_hider = 0
     anno_inteval = 5
     anno = False
-
     def __init__(this, n_input, m_input, map_input):
         this.n = n_input
         this.m = m_input
@@ -173,12 +172,11 @@ class Seeker:
 
     def catch(this):
         if this.pos[0] + this.movement[this.next_step][0] == this.hider[this.nearest_hider].pos[0] and this.pos[1] + \
-                this.movement[this.next_step][1] == this.hider[this.nearest_hider].pos[1]:
+                this.movement[this.next_step][1] == this.hider[this.nearest_hider].pos[1] and not this.hider_caught[this.nearest_hider]:
             this.map[this.hider[this.nearest_hider].pos[0]][this.hider[this.nearest_hider].pos[1]] = 0
             return True
 
     def move(this):
-        if(this.score > 0):
             this.score -= 1
             if this.catch():
                 this.hider_caught[this.nearest_hider] = True
@@ -197,3 +195,12 @@ class Seeker:
                 if not this.visited[i][j]:
                     if this.can_be_seen(this.pos[0],this.pos[1],i,j):
                         this.visited[i][j]=True
+
+    def Scan(this):
+        total = 0
+        for i in range(this.n):
+            for j in range(this.m):
+                if (this.map[i][j] == 2):
+                    total += 1
+        if (total == 0): return True
+        return False

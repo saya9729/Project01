@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import math
 import time
 import random
@@ -137,57 +137,6 @@ hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32
 
 
 # game loop
-def draw_data(n, m, map):
-    running = True
-    seeker = Seeker.Seeker(n, m, map)
-    seeker.update_seen()
-    while running:
-        # RGB-color
-
-        screen.fill((255, 255, 255))
-        # background print
-        screen.blit(paper_img, (0, 0))
-        time.sleep(0.1)
-        seeker.look()
-        seeker.set_direction()
-        seeker.move()
-        for i in range(n):
-            for j in range(m):
-                if (map[i][j] == 0):
-                    screen.blit(tile_img, (j * 32, i * 32))
-                elif (map[i][j] == 1):
-                    rand = math.floor(random.uniform(0, 4))
-                    if rand == 0:
-                        screen.blit(wall_1_img, (j * 32, i * 32))
-                    if rand == 1:
-                        screen.blit(wall_2_img, (j * 32, i * 32))
-                    if rand == 2:
-                        screen.blit(wall_3_img, (j * 32, i * 32))
-                    if rand == 3:
-                        screen.blit(wall_4_img, (j * 32, i * 32))
-
-                elif (map[i][j] == 2):
-                    screen.blit(hider_img, (j * 32, i * 32))
-                elif (map[i][j] == 3):
-                    screen.blit(seeker_img, (j * 32, i * 32))
-                elif (map[i][j] == 4):
-                    screen.blit(hint_img, (j * 32, i * 32))
-                elif (map[i][j] == 5):
-                    rand = math.floor(random.uniform(0, 4))
-                    if rand == 0:
-                        screen.blit(border_1_img, (j * 32, i * 32))
-                    if rand == 1:
-                        screen.blit(border_2_img, (j * 32, i * 32))
-                    if rand == 2:
-                        screen.blit(border_3_img, (j * 32, i * 32))
-                    if rand == 3:
-                        screen.blit(border_4_img, (j * 32, i * 32))
-        Print_score(0, m/2, 30, WHITE, str(seeker.score))
-        Print_result(m, n, seeker.score, map)
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
 def Print_score(x, y, size, color, score):
     # font = pygame.font.SysFont(None, size)
     # text = font.render(score, True, color)
@@ -226,7 +175,7 @@ def draw_text2(text, color, surface, x,y, size, fontStyle):
 click = False
 
 # Main Menu function (open)
-def menu(n,m,map1,map2,map3,map4):
+def menu():
     while True:
         # Background for menu
         screen.blit(menu_img, (0, 0))
@@ -240,24 +189,16 @@ def menu(n,m,map1,map2,map3,map4):
         mx, my = pygame.mouse.get_pos()
 
         # buttons
-        button_1 = pygame.Rect(50, 100, 200, 50)
-        button_2 = pygame.Rect(50, 200, 200, 50)
-        button_3 = pygame.Rect(50, 300, 200, 50)
-        button_4 = pygame.Rect(400, 380, 200, 50)
-        button_5 = pygame.Rect(50, 500, 200, 50)
+        button_1 = pygame.Rect(520, 380, 60, 60)
+        button_2 = pygame.Rect(570, 195, 60, 60)
+        button_3 = pygame.Rect(740, 110, 60, 60)
+        button_4 = pygame.Rect(930, 195, 60, 60)
+        button_5 = pygame.Rect(980, 380, 60, 60)
+        button_6 = pygame.Rect(630, 250, 300, 350)
 
 
 
-        pygame.draw.rect(screen, (255,0,0), button_1)
-        draw_text('Map 1', font_2, (255, 255, 255), screen, 50, 100)
-        pygame.draw.rect(screen, (255,0,0), button_2)
-        draw_text('Map 2', font_2, (255, 255, 255), screen, 50, 200)
-        pygame.draw.rect(screen, (255,0,0), button_3)
-        draw_text('Map 3', font_2, (255, 255, 255), screen, 50, 300)
-        pygame.draw.rect(screen, (255,0,0), button_4)
-        draw_text('Map 4', font_2, (255,255,255), screen, 50, 400)
-        pygame.draw.rect(screen, (255,0,0), button_5)
-        draw_text('Exit', font_2, (255, 255, 255), screen, 50,  500)
+        #pygame.draw.rect(screen,(255,0,0),button_6)
 
         # # Background for menu
         # screen.blit(menu_img, (0, 0))
@@ -267,30 +208,43 @@ def menu(n,m,map1,map2,map3,map4):
 
         # Map 1st button
         if button_1.collidepoint((mx, my)):
-            pygame.draw.rect(screen, (255, 255, 255), button_1)
-            draw_text('Map 1', font_2, (0, 0, 0), screen, 50, 100)
+            time.sleep(0.1)
+            draw_text('Map 1', font_2, (255, 255, 255), screen, 360, 380)
             if click:
-                game(n, m, map1)
+                Load_map("map1.txt")
+
 
         # Map 2nd button
         if button_2.collidepoint((mx, my)):
+            time.sleep(0.1)
+            draw_text('Map 2', font_2, (255, 255, 255), screen, 410, 195)
             if click:
-                game(n, m, map1)
+                Load_map("map2.txt")
 
         # Map 3rd button
         if button_3.collidepoint((mx, my)):
+            time.sleep(0.1)
+            draw_text('Map 3', font_2, (255, 255, 255), screen, 740+80, 110)
             if click:
-                game(n, m, map1)
+                Load_map("map3.txt")
 
         # Map 4th button
         if button_4.collidepoint((mx, my)):
-            # pygame.draw.rect(screen, (255, 255, 255), button_4)
-            draw_text('Map 4', font_2, (255, 255, 255), screen, 400, 380)
+            time.sleep(0.1)
+            draw_text('Map 4', font_2, (255, 255, 255), screen, 1010, 195)
             if click:
-                game(n, m, map1)
+                Load_map("map4.txt")
 
-        # Exit button
+        # Map 5 button
         if button_5.collidepoint((mx, my)):
+            time.sleep(0.1)
+            draw_text('Map 5', font_2, (255, 255, 255), screen, 980+80, 380)
+            if click:
+                Load_map("map5.txt")
+        #Exit button
+        if button_6.collidepoint((mx, my)):
+            time.sleep(0.1)
+            draw_text('Exit', font_2, (255, 255, 255), screen, 740, 630)
             if click:
                 pygame.quit()
                 sys.exit()
@@ -318,17 +272,17 @@ def game(n, m, map):
 
 
     while running:
-
-
-
             # RGB-color
             screen.fill((255, 255, 255))
             # background print
             screen.blit(paper_img, (0, 0))
             time.sleep(0.1)
-            seeker.look()
-            seeker.set_direction()
-            seeker.move()
+            if (seeker.score > 0 and not Scan(m, n, map)):
+                seeker.look()
+                seeker.set_direction()
+                seeker.move()
+            else:
+                Print_result(m, n, seeker.score, map)
             for i in range(n):
                 for j in range(m):
                     if (map[i][j] == 0):
@@ -361,7 +315,7 @@ def game(n, m, map):
                         if rand == 3:
                             screen.blit(border_4_img, (j * 32, i * 32))
             Print_score(0, m / 2, 30, WHITE, str(seeker.score))
-            Print_result(m, n, seeker.score, map)
+
             pygame.display.update()
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -371,3 +325,15 @@ def game(n, m, map):
                     if event.key == K_ESCAPE:
                         running = False
             mainClock.tick(60)
+
+# load map function for main
+def Load_map(filename):
+    file = open(filename, "r")
+    line = file.readlines()
+    n = int(line[0].split()[0])
+    m = int(line[0].split()[1])
+    map = [[0 for i in range(m)] for j in range(n)]
+    for i in range(n):
+        for j in range(m):
+            map[i][j] = int(line[i + 1].split()[j])
+    game(n, m, map)
