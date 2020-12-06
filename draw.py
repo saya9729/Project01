@@ -5,7 +5,9 @@ import random
 import Seeker
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-
+pygame.mixer.init()
+pygame.mixer.music.load("01 Blood and Wine.mp3")
+pygame.mixer.music.play(-1, 0.0)
 # intialize the pygame
 mainClock = pygame.time.Clock()
 from pygame.locals import *
@@ -25,6 +27,8 @@ font_2 =  pygame.font.Font("picture/Magic.ttf", 50)
 screenWidth = 48  # the number of tile in x axis
 screenHeight = 24  # the number of tile in y axis
 
+DscreenWidth = 48  # the number of tile in x axis
+DscreenHeight = 24  # the number of tile in y axis
 #color
 WHITE = (255, 255, 255)
 
@@ -62,26 +66,17 @@ border_2_img = pygame.transform.scale(pygame.image.load('picture/border2.png'), 
 border_3_img = pygame.transform.scale(pygame.image.load('picture/border3.png'), (32, 32))
 border_4_img = pygame.transform.scale(pygame.image.load('picture/border4.png'), (32, 32))
 
-# backgrounds
-paper_img = pygame.transform.scale(pygame.image.load('picture/paper.jpg'), (screenWidth * 32, screenHeight * 32))
-game_over_img = pygame.transform.scale(pygame.image.load('picture/game_over.png'),
-                                       (screenWidth * 32, screenHeight * 32))
-game_win_img = pygame.transform.scale(pygame.image.load('picture/menu.png'),
-                                       (screenWidth * 32, screenHeight * 32))
-menu_img = pygame.transform.scale(pygame.image.load('picture/witchermenu.png'), (screenWidth * 32, screenHeight * 32))
-hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32))
-hint2_img = pygame.transform.scale(pygame.image.load('picture/hint2.png'), (32, 32))
+menu_img = pygame.transform.scale(pygame.image.load('picture/witchermenu.png'),
+                                      (DscreenWidth * 32, DscreenHeight * 32))
+
+anno_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32))
+hint_img = pygame.transform.scale(pygame.image.load('picture/hint2.png'), (32, 32))
 # load image
 load_img = pygame.transform.scale(pygame.image.load('picture/warrior.png'), (64, 64))
 
 # game loop
 def Print_score(x, y, size, color, score):
     draw_text2(score, color, screen, y*32-15, x*32-10, size, "picture/AndadaSC-Regular.ttf")
-def Print_result(m,n, score, map):
-    if (score <= 0):
-        screen.blit(game_over_img, (0,0))
-    elif (Scan(m,n, map)):
-        screen.blit(game_win_img, (0, 0))
 def Scan(m, n, map):
     total = 0
     for i in range(n):
@@ -206,6 +201,13 @@ def game(n, m, map):
     seeker.update_seen()
     screenWidth=m+2
     screenHeight=n+2
+    # backgrounds
+    paper_img = pygame.transform.scale(pygame.image.load('picture/paper.jpg'), (screenWidth * 32, screenHeight * 32))
+    game_over_img = pygame.transform.scale(pygame.image.load('picture/game_over.png'),
+                                           (screenWidth * 32, screenHeight * 32))
+    game_win_img = pygame.transform.scale(pygame.image.load('picture/menu.png'),
+                                          (screenWidth * 32, screenHeight * 32))
+
     screen = pygame.display.set_mode((screenWidth * 32, screenHeight * 32))
     while running:
             # RGB-color
@@ -218,7 +220,10 @@ def game(n, m, map):
                 seeker.set_direction()
                 seeker.move()
             else:
-                Print_result(m, n, seeker.score, map)
+                if (seeker.score <= 0):
+                    screen.blit(game_over_img, (0, 0))
+                elif (Scan(m, n, map)):
+                    screen.blit(game_win_img, (0, 0))
             for i in range(n):
                 for j in range(m):
                     if i==0:
@@ -318,11 +323,9 @@ def game(n, m, map):
                         screen.blit(hider_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 3):
                         screen.blit(seeker_img, ((j+1) * 32, (i+1) * 32))
-                    elif (map[i][j] == 4):
-                        screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 6):
-                        screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
-            seeker.draw_annouce(screen,hint2_img)
+                        screen.blit(anno_img, ((j+1) * 32, (i+1) * 32))
+            seeker.draw_annouce(screen,hint_img)
             Print_score(0, m/2, 35, WHITE, str(seeker.score))
 
             pygame.display.update()
@@ -334,6 +337,7 @@ def game(n, m, map):
                     if event.key == K_ESCAPE:
                         running = False
             mainClock.tick(60)
+    screen = pygame.display.set_mode((DscreenWidth * 32, DscreenHeight * 32))
 
 # load map function for main
 def Load_map(filename):

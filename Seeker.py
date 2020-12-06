@@ -13,11 +13,11 @@ class Seeker:
     hide_value = 0.6324
     vision_radius = 3
     score = 20
-    hider = []
     nearest_hider = 0
     anno_inteval = 5
     anno = False
     def __init__(this, n_input, m_input, map_input):
+        this.hider = []
         this.n = n_input
         this.m = m_input
         this.map = map_input
@@ -34,6 +34,7 @@ class Seeker:
                     # this.map[i][j] = 0
         this.hider_seen = [False for i in range(len(this.hider))]
         this.hider_caught = [False for i in range(len(this.hider))]
+        this.score=math.floor(max(this.n,this.m)/(len(this.hider) if len(this.hider)!=0 else 1) )+5
 
     def look(this):
         if (101 - this.score) % this.anno_inteval == 0:
