@@ -12,10 +12,11 @@ class Seeker:
     c_coeff = 0.0
     hide_value = 0.6324
     vision_radius = 3
-    score = 20
+    score = 100
     nearest_hider = 0
     anno_inteval = 5
     anno = False
+    last_pos=[0,0]
     def __init__(this, n_input, m_input, map_input):
         this.hider = []
         this.n = n_input
@@ -27,14 +28,14 @@ class Seeker:
                 if this.map[i][j] == 1:
                     this.visited[i][j] = True
                 if this.map[i][j] == 2:
-                    this.hider.append(Hider.Hider(i, j))
+                    this.hider.append(Hider.Hider(this.n,this.m,this.map,i, j))
                     # this.map[i][j] = 0
                 if this.map[i][j] == 3:
                     this.pos = [i, j]
                     # this.map[i][j] = 0
         this.hider_seen = [False for i in range(len(this.hider))]
         this.hider_caught = [False for i in range(len(this.hider))]
-        this.score=math.floor(max(this.n,this.m)/(len(this.hider) if len(this.hider)!=0 else 1) )+5
+        #this.score=math.floor(max(this.n,this.m)/(len(this.hider) if len(this.hider)!=0 else 1) )+5
 
     def look(this):
         if (101 - this.score) % this.anno_inteval == 0:
@@ -101,9 +102,9 @@ class Seeker:
             min = max(this.n, this.m)
             for i in range(8):
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
-                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m:
+                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m and this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]:
                     continue
-                if this.pos[0] + this.movement[i][0] >=0 and this.pos[1] + this.movement[i][1]>=0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] <this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+                if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1 and( this.last_pos[0]!=this.pos[0]+this.movement[i][0] or this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     if this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
                                         this.hider[this.nearest_hider].pos[1]) < min:
                         min = this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
@@ -119,9 +120,9 @@ class Seeker:
             min = max(this.n, this.m)
             for i in range(8):
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
-                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m:
+                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m and this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]:
                     continue
-                if this.pos[0] + this.movement[i][0] >=0 and this.pos[1] + this.movement[i][1]>=0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] <this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+                if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1 and (this.last_pos[0]!=this.pos[0]+this.movement[i][0] or this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     if this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
                                         this.hider[this.nearest_hider].anno[1]) < min:
                         min = this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
@@ -130,7 +131,10 @@ class Seeker:
         else:
             max_val = -1
             for i in range(8):
-                if this.pos[0] + this.movement[i][0] >=0 and this.pos[1] + this.movement[i][1]>=0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] <this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+                if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
+                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m and this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]:
+                    continue
+                if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1 and (this.last_pos[0]!=this.pos[0]+this.movement[i][0] or this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     if this.tai_heuristic(i) > max_val:
                         max_val = this.tai_heuristic(i)
                         this.next_step = i
@@ -179,16 +183,22 @@ class Seeker:
             return True
 
     def move(this):
-        this.remove_seen()
-        this.score -= 1
-        if this.catch():
-            this.hider_caught[this.nearest_hider] = True
-            this.score += 20
-        this.map[this.pos[0]][this.pos[1]] = 0
-        this.pos[0] += this.movement[this.next_step][0]
-        this.pos[1] += this.movement[this.next_step][1]
-        this.map[this.pos[0]][this.pos[1]] = 3
-        this.update_seen()
+        if this.next_step!=-1:
+            this.last_pos[0] = this.pos[0]
+            this.last_pos[1] = this.pos[1]
+            this.remove_seen()
+            this.score -= 1
+            if this.catch():
+                this.hider_caught[this.nearest_hider] = True
+                this.score += 20
+            this.map[this.pos[0]][this.pos[1]] = 0
+            this.pos[0] += this.movement[this.next_step][0]
+            this.pos[1] += this.movement[this.next_step][1]
+            this.map[this.pos[0]][this.pos[1]] = 3
+            this.update_seen()
+            for i in range(len(this.hider)):
+                this.hider[i].seeker_pos[0] = this.pos[0]
+                this.hider[i].seeker_pos[1] = this.pos[1]
 
 
     def update_seen(this):

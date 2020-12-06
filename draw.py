@@ -104,7 +104,9 @@ click = False
 
 # Main Menu function (open)
 def menu():
+    click = False
     while True:
+
         # Background for menu
         screen.blit(menu_img, (0, 0))
 
@@ -215,10 +217,17 @@ def game(n, m, map):
             # background print
             screen.blit(paper_img, (0, 0))
             time.sleep(0.1)
+
             if (seeker.score > 0 and not Scan(m, n, map)):
+                for i in range (len(seeker.hider)):
+                    if not seeker.hider_caught[i]:
+                        seeker.hider[i].look()
+                        seeker.hider[i].set_direction()
+                        seeker.hider[i].move()
                 seeker.look()
                 seeker.set_direction()
                 seeker.move()
+
             else:
                 if (seeker.score <= 0):
                     screen.blit(game_over_img, (0, 0))
