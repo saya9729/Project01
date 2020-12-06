@@ -1,5 +1,6 @@
 import math
 import Hider
+import pygame
 
 
 class Seeker:
@@ -101,7 +102,7 @@ class Seeker:
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
                         this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m:
                     continue
-                if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+                if this.pos[0] + this.movement[i][0] >=0 and this.pos[1] + this.movement[i][1]>=0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] <this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
                     if this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
                                         this.hider[this.nearest_hider].pos[1]) < min:
                         min = this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
@@ -119,7 +120,7 @@ class Seeker:
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
                         this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m:
                     continue
-                if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+                if this.pos[0] + this.movement[i][0] >=0 and this.pos[1] + this.movement[i][1]>=0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] <this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
                     if this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
                                         this.hider[this.nearest_hider].anno[1]) < min:
                         min = this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
@@ -205,3 +206,8 @@ class Seeker:
             for j in range(this.m):
                 if this.map[i][j]==6:
                     this.map[i][j]=0
+
+    def draw_annouce(this,screen,image):
+        for i in range(len(this.hider)):
+            if not this.hider_caught[i]:
+                screen.blit(image, ((this.hider[i].anno[1] + 1) * 32, (this.hider[i].anno[0] + 1) * 32))

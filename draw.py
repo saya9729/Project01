@@ -316,6 +316,7 @@ def game(n, m, map):
                         screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 6):
                         screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
+            seeker.draw_annouce(screen,hint_img)
             Print_score(0, m / 2, 30, WHITE, str(seeker.score))
 
             pygame.display.update()
