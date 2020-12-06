@@ -1,6 +1,7 @@
 import math
 import Hider
 import pygame
+import random
 
 
 class Seeker:
@@ -17,16 +18,17 @@ class Seeker:
     anno_inteval = 5
     anno = False
     last_pos=[0,0]
+    next_step_array=[]
     def __init__(this, n_input, m_input, map_input):
         this.hider = []
         this.n = n_input
         this.m = m_input
         this.map = map_input
-        this.visited = [[False for i in range(this.m)] for j in range(this.n)]
+        this.map_seen = [[False for i in range(this.m)] for j in range(this.n)]
         for i in range(this.n):
             for j in range(this.m):
                 if this.map[i][j] == 1:
-                    this.visited[i][j] = True
+                    this.map_seen[i][j] = True
                 if this.map[i][j] == 2:
                     this.hider.append(Hider.Hider(this.n,this.m,this.map,i, j))
                     # this.map[i][j] = 0
@@ -35,7 +37,7 @@ class Seeker:
                     # this.map[i][j] = 0
         this.hider_seen = [False for i in range(len(this.hider))]
         this.hider_caught = [False for i in range(len(this.hider))]
-        #this.score=math.floor(max(this.n,this.m)/(len(this.hider) if len(this.hider)!=0 else 1) )+5
+        this.score= this.m* this.n+5
 
     def look(this):
         if (101 - this.score) % this.anno_inteval == 0:
@@ -78,7 +80,8 @@ class Seeker:
 
     def cal_distance(this, x, y):
         return abs(this.a_coeff * x + this.b_coeff * y + this.c_coeff) / math.sqrt(
-            this.a_coeff ** 2 + this.b_coeff ** 2) if this.a_coeff != 0 and this.b_coeff != 0 else 1
+            this.a_coeff ** 2 + this.b_coeff ** 2) if (this.a_coeff != 0 and this.b_coeff != 0) or abs(this.a_coeff * x + this.b_coeff * y + this.c_coeff) / math.sqrt(
+            this.a_coeff ** 2 + this.b_coeff ** 2)!=0 else 1
 
     def cal_line(this, hider_index):
         this.a_coeff = this.hider[hider_index].pos[1] - this.pos[1]
@@ -102,14 +105,19 @@ class Seeker:
             min = max(this.n, this.m)
             for i in range(8):
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
-                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m and this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]:
+                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m or( this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     continue
                 if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1 and( this.last_pos[0]!=this.pos[0]+this.movement[i][0] or this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     if this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
                                         this.hider[this.nearest_hider].pos[1]) < min:
                         min = this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
                                                this.hider[this.nearest_hider].pos[1])
-                        this.next_step = i
+                        this.next_step_array.clear()
+                        this.next_step_array.append(min)
+                    elif this.a_heuristic(i, this.hider[this.nearest_hider].pos[0],
+                                        this.hider[this.nearest_hider].pos[1]) == min:
+                        this.next_step_array.append(min)
+            this.next_step = this.choose_random_step()
         elif this.anno:
             min = max(this.n, this.m)
             for i in range(len(this.hider)):
@@ -120,24 +128,30 @@ class Seeker:
             min = max(this.n, this.m)
             for i in range(8):
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
-                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m and this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]:
+                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m or (this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     continue
                 if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1 and (this.last_pos[0]!=this.pos[0]+this.movement[i][0] or this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     if this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
                                         this.hider[this.nearest_hider].anno[1]) < min:
                         min = this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
                                                this.hider[this.nearest_hider].anno[1])
-                        this.next_step = i
+                        this.next_step_array.clear()
+                        this.next_step_array.append(min)
+                    elif this.a_heuristic(i, this.hider[this.nearest_hider].anno[0],
+                                        this.hider[this.nearest_hider].anno[1]) == min:
+                        this.next_step_array.append(min)
+            this.next_step = this.choose_random_step()
         else:
             max_val = -1
             for i in range(8):
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
-                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m and this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]:
+                        this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m or ( this.last_pos[0]!=this.pos[0]+this.movement[i][0] and this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     continue
                 if this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1 and (this.last_pos[0]!=this.pos[0]+this.movement[i][0] or this.last_pos[1]!=this.pos[1]+this.movement[i][1]):
                     if this.tai_heuristic(i) > max_val:
                         max_val = this.tai_heuristic(i)
                         this.next_step = i
+
 
     def a_heuristic(this, next_step, x, y):
         return max(abs(this.pos[0] + this.movement[next_step][0] - x),
@@ -150,7 +164,7 @@ class Seeker:
                            this.pos[1] + this.movement[next_step][1] + 4):
                 if i < 0 or j < 0 or i >= this.n or j >= this.m:
                     continue
-                if not this.visited[i][j]:
+                if not this.map_seen[i][j]:
                     if this.can_be_seen(this.pos[0] + this.movement[next_step][0],
                                         this.pos[1] + this.movement[next_step][1], i, j):
                         count += 1
@@ -204,13 +218,14 @@ class Seeker:
     def update_seen(this):
         for i in range(this.pos[0] - 3, this.pos[0] + 4):
             for j in range(this.pos[1] - 3, this.pos[1] + 4):
-                if i < 0 or j < 0 or i >= this.n or j >= this.m:
-                    continue
-                if this.can_be_seen(this.pos[0], this.pos[1], i, j):
-                    if not(i==this.pos[0] and j==this.pos[1]) and this.map[i][j]==0:
-                        this.map[i][j]=6
-                    if not this.visited[i][j]:
-                        this.visited[i][j]=True
+                # if i < 0 or j < 0 or i >= this.n or j >= this.m:
+                #     continue
+                if i >= 0 and j >= 0 and i < this.n and j < this.m:
+                    if this.can_be_seen(this.pos[0], this.pos[1], i, j):
+                        if not (i == this.pos[0] and j == this.pos[1]) and this.map[i][j] == 0:
+                            this.map[i][j] = 6
+                        if not this.map_seen[i][j]:
+                            this.map_seen[i][j] = True
 
     def remove_seen(this):
         for i in range(this.n):
@@ -222,3 +237,7 @@ class Seeker:
         for i in range(len(this.hider)):
             if not this.hider_caught[i]:
                 screen.blit(image, ((this.hider[i].anno[1] + 1) * 32, (this.hider[i].anno[0] + 1) * 32))
+
+    def choose_random_step(this):
+        rand=math.floor(random.uniform(0,len(this.next_step_array)))
+        return this.next_step_array[rand]

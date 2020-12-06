@@ -48,7 +48,7 @@ class Hider:
         this.next_step = -1  # reset first
         if this.seen:
             maxVal = 0
-            for i in range(7,-1,-1):
+            for i in range(8):
                 if this.pos[0] + this.movement[i][0] < 0 or this.pos[0] + this.movement[i][0] >= this.n or this.pos[1] + \
                         this.movement[i][1] < 0 or this.pos[1] + this.movement[i][1] >= this.m:
                     continue
