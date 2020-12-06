@@ -13,6 +13,8 @@ pygame.init()
 # screenHeight = n # the number of tile in y axis
 screenWidth = 48  # the number of tile in x axis
 screenHeight = 24  # the number of tile in y axis
+#color
+WHITE = (255, 255, 255)
 
 speed = 1
 
@@ -117,6 +119,8 @@ def tilemap(tile_x, tile_y):
 paper_img = pygame.transform.scale(pygame.image.load('picture/paper.jpg'), (screenWidth * 32, screenHeight * 32))
 game_over_img = pygame.transform.scale(pygame.image.load('picture/game_over.png'),
                                        (screenWidth * 32, screenHeight * 32))
+game_win_img = pygame.transform.scale(pygame.image.load('picture/menu.png'),
+                                       (screenWidth * 32, screenHeight * 32))
 menu_img = pygame.transform.scale(pygame.image.load('picture/menu.png'), (screenWidth * 32, screenHeight * 32))
 hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32))
 
@@ -167,9 +171,28 @@ def draw_data(n, m, map):
                         screen.blit(border_3_img, (j * 32, i * 32))
                     if rand == 3:
                         screen.blit(border_4_img, (j * 32, i * 32))
+        Print_score(0, m/2, 30, WHITE, str(seeker.score))
+        Print_result(m, n, seeker.score, map)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-
-#  runing game
+def Print_score(x, y, size, color, score):
+    font = pygame.font.SysFont(None, size)
+    text = font.render(score, True, color)
+    text_rect = text.get_rect()
+    text_rect.midtop = (y*32, x)
+    screen.blit(text, text_rect)
+def Print_result(m,n, score, map):
+    if (score <= 0):
+        screen.blit(game_over_img, (0,0))
+    elif (Scan(m,n, map)):
+        screen.blit(game_win_img, (0, 0))
+def Scan(m, n, map):
+    total = 0
+    for i in range(n):
+        for j in range(m):
+            if (map[i][j] == 2):
+                total+=1
+    if (total == 0): return True
+    return False

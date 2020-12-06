@@ -178,15 +178,16 @@ class Seeker:
             return True
 
     def move(this):
-        this.score -= 1
-        if this.catch():
-            this.hider_caught[this.nearest_hider] = True
-            this.score += 20
-        this.map[this.pos[0]][this.pos[1]] = 0
-        this.pos[0] += this.movement[this.next_step][0]
-        this.pos[1] += this.movement[this.next_step][1]
-        this.map[this.pos[0]][this.pos[1]] = 3
-        this.update_seen()
+        if(this.score > 0):
+            this.score -= 1
+            if this.catch():
+                this.hider_caught[this.nearest_hider] = True
+                this.score += 20
+            this.map[this.pos[0]][this.pos[1]] = 0
+            this.pos[0] += this.movement[this.next_step][0]
+            this.pos[1] += this.movement[this.next_step][1]
+            this.map[this.pos[0]][this.pos[1]] = 3
+            this.update_seen()
 
     def update_seen(this):
         for i in range(this.pos[0] - 3, this.pos[0] + 4):
