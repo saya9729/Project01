@@ -123,7 +123,7 @@ border_4_img = pygame.transform.scale(pygame.image.load('picture/border4.png'), 
 def tilemap(tile_x, tile_y):
     for i in range(tile_x):
         for j in range(tile_y):
-            screen.blit(tile_img, (j * 32, i * 32))
+            screen.blit(tile_img, ((j+1) * 32, (i+1) * 32))
 
 
 # backgrounds
@@ -285,35 +285,37 @@ def game(n, m, map):
                 Print_result(m, n, seeker.score, map)
             for i in range(n):
                 for j in range(m):
+                    if (i==0 or j==0 or i==n-1 or j==m-1):
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j) * 32, (i) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j) * 32, (i) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j) * 32, (i) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j) * 32, (i) * 32))
                     if (map[i][j] == 0):
-                        screen.blit(tile_img, (j * 32, i * 32))
+                        screen.blit(tile_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 1):
                         rand = math.floor(random.uniform(0, 4))
                         if rand == 0:
-                            screen.blit(wall_1_img, (j * 32, i * 32))
+                            screen.blit(wall_1_img, ((j+1) * 32, (i+1) * 32))
                         if rand == 1:
-                            screen.blit(wall_2_img, (j * 32, i * 32))
+                            screen.blit(wall_2_img, ((j+1) * 32, (i+1) * 32))
                         if rand == 2:
-                            screen.blit(wall_3_img, (j * 32, i * 32))
+                            screen.blit(wall_3_img, ((j+1) * 32, (i+1) * 32))
                         if rand == 3:
-                            screen.blit(wall_4_img, (j * 32, i * 32))
+                            screen.blit(wall_4_img, ((j+1) * 32, (i+1) * 32))
 
                     elif (map[i][j] == 2):
-                        screen.blit(hider_img, (j * 32, i * 32))
+                        screen.blit(hider_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 3):
-                        screen.blit(seeker_img, (j * 32, i * 32))
+                        screen.blit(seeker_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 4):
-                        screen.blit(hint_img, (j * 32, i * 32))
-                    elif (map[i][j] == 5):
-                        rand = math.floor(random.uniform(0, 4))
-                        if rand == 0:
-                            screen.blit(border_1_img, (j * 32, i * 32))
-                        if rand == 1:
-                            screen.blit(border_2_img, (j * 32, i * 32))
-                        if rand == 2:
-                            screen.blit(border_3_img, (j * 32, i * 32))
-                        if rand == 3:
-                            screen.blit(border_4_img, (j * 32, i * 32))
+                        screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
+                    elif (map[i][j] == 6):
+                        screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
             Print_score(0, m / 2, 30, WHITE, str(seeker.score))
 
             pygame.display.update()
