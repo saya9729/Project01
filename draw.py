@@ -12,7 +12,7 @@ from pygame.locals import *
 pygame.init()
 
 # title and icon
-pygame.display.set_caption("H&S")
+pygame.display.set_caption("HIDE & SEEK")
 icon = pygame.image.load('picture/H&S.png')
 pygame.display.set_icon(icon)
 
@@ -22,87 +22,29 @@ font_2 =  pygame.font.Font("picture/Magic.ttf", 50)
 
 
 #global
-# screenWidth = m # the number of tile in x axis
-# screenHeight = n # the number of tile in y axis
 screenWidth = 48  # the number of tile in x axis
 screenHeight = 24  # the number of tile in y axis
+
 #color
 WHITE = (255, 255, 255)
-
-speed = 1
 
 # create the screen
 screen = pygame.display.set_mode((screenWidth * 32, screenHeight * 32))
 
-# title and icon
-pygame.display.set_caption("H&S")
-icon = pygame.image.load('picture/H&S.png')
-pygame.display.set_icon(icon)
 
 # seeker  
 seeker_img = pygame.transform.scale(pygame.image.load('picture/warrior.png'), (32, 32))
-seeker_x = 4
-seeker_y = 4
-seeker_y_change = speed
-seeker_x_change = speed
-
 
 # show the seeker image on screen
 def seeker(x, y):
     screen.blit(seeker_img, (x * 32, y * 32))
 
-
-# seeker border reflex
-def seeker_border_reflex(seeker_x, seeker_y, seeker_x_change, seeker_y_change):
-    if seeker_x <= 0:
-        seeker_x_change = speed
-    elif seeker_x >= screenWidth - 1:
-        seeker_x_change = -speed
-    if seeker_y <= 0:
-        seeker_y_change = +speed
-    elif seeker_y >= screenHeight - 1:
-        seeker_y_change = -speed
-    seeker_y += seeker_y_change
-    seeker_x += seeker_x_change
-
-    return seeker_x, seeker_y, seeker_x_change, seeker_y_change
-
-
 # hider
 hider_img = pygame.transform.scale(pygame.image.load('picture/dragon.png'), (32, 32))
-hider_x = 4
-hider_y = 3
-hider_y_change = speed
-hider_x_change = speed
-
 
 # show the hider image on screen
 def hider(x, y):
     screen.blit(hider_img, (x * 32, y * 32))
-
-
-# hider border reflex
-def hider_border_reflex(hider_x, hider_y, hider_x_change, hider_y_change):
-    if hider_x <= 0:
-        hider_x_change = speed
-    elif hider_x >= screenWidth - 1:
-        hider_x_change = -speed
-    if hider_y <= 0:
-        hider_y_change = speed
-    elif hider_y >= screenHeight - 1:
-        hider_y_change = -speed
-    # hider_y += hider_y_change
-    hider_x += hider_x_change
-
-    return hider_x, hider_y, hider_x_change, hider_y_change
-
-
-# check the collision of seeker and hider 
-def is_collision(seeker_x, seeker_y, hider_x, hider_y):
-    distance = math.sqrt((math.pow(seeker_x - hider_x, 2)) + (math.pow(seeker_y - hider_y, 2)))
-    if distance <= 0:
-        return True
-    return False
 
 
 # the tile map
@@ -120,14 +62,6 @@ border_2_img = pygame.transform.scale(pygame.image.load('picture/border2.png'), 
 border_3_img = pygame.transform.scale(pygame.image.load('picture/border3.png'), (32, 32))
 border_4_img = pygame.transform.scale(pygame.image.load('picture/border4.png'), (32, 32))
 
-
-# map function
-def tilemap(tile_x, tile_y):
-    for i in range(tile_x):
-        for j in range(tile_y):
-            screen.blit(tile_img, ((j+1) * 32, (i+1) * 32))
-
-
 # backgrounds
 paper_img = pygame.transform.scale(pygame.image.load('picture/paper.jpg'), (screenWidth * 32, screenHeight * 32))
 game_over_img = pygame.transform.scale(pygame.image.load('picture/game_over.png'),
@@ -136,16 +70,13 @@ game_win_img = pygame.transform.scale(pygame.image.load('picture/menu.png'),
                                        (screenWidth * 32, screenHeight * 32))
 menu_img = pygame.transform.scale(pygame.image.load('picture/witchermenu.png'), (screenWidth * 32, screenHeight * 32))
 hint_img = pygame.transform.scale(pygame.image.load('picture/hint.png'), (32, 32))
+hint2_img = pygame.transform.scale(pygame.image.load('picture/hint2.png'), (32, 32))
+# load image
 load_img = pygame.transform.scale(pygame.image.load('picture/warrior.png'), (64, 64))
 
 # game loop
 def Print_score(x, y, size, color, score):
-    # font = pygame.font.SysFont(None, size)
-    # text = font.render(score, True, color)
-    draw_text2(score, color, screen, y*32, x*32, 50, "picture/AndadaSC-Regular.ttf")
-    # text_rect = text.get_rect()
-    # text_rect.midtop = (y*32, x)
-    # screen.blit(text, text_rect)
+    draw_text2(score, color, screen, y*32-15, x*32-10, size, "picture/AndadaSC-Regular.ttf")
 def Print_result(m,n, score, map):
     if (score <= 0):
         screen.blit(game_over_img, (0,0))
@@ -201,14 +132,6 @@ def menu():
 
         screen.blit(load_img, button_7)
 
-        #pygame.draw.rect(screen,(255,0,0),button_6)
-
-        # # Background for menu
-        # screen.blit(menu_img, (0, 0))
-        #
-        # # title of game
-        # draw_text('H I D E   &   S E E K', font, (255, 255, 255), screen, 578, 20)
-
         # Map 1st button
         if button_1.collidepoint((mx, my)):
             time.sleep(0.1)
@@ -251,7 +174,8 @@ def menu():
             if click:
                 pygame.quit()
                 sys.exit()
-                # load button
+
+         # load button
         if button_7.collidepoint((mx, my)):
             time.sleep(0.1)
             draw_text('Load File', font_2, (255, 255, 255), screen, 690, 630)
@@ -327,8 +251,8 @@ def game(n, m, map):
                         screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 6):
                         screen.blit(hint_img, ((j+1) * 32, (i+1) * 32))
-            seeker.draw_annouce(screen,hint_img)
-            Print_score(0, m / 2, 30, WHITE, str(seeker.score))
+            seeker.draw_annouce(screen,hint2_img)
+            Print_score(0, m/2, 35, WHITE, str(seeker.score))
 
             pygame.display.update()
             for event in pygame.event.get():
