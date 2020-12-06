@@ -204,8 +204,9 @@ def game(n, m, map):
     running = True
     seeker = Seeker.Seeker(n, m, map)
     seeker.update_seen()
-
-
+    screenWidth=m+2
+    screenHeight=n+2
+    screen = pygame.display.set_mode((screenWidth * 32, screenHeight * 32))
     while running:
             # RGB-color
             screen.fill((255, 255, 255))
@@ -220,7 +221,47 @@ def game(n, m, map):
                 Print_result(m, n, seeker.score, map)
             for i in range(n):
                 for j in range(m):
-                    if (i==0 or j==0 or i==n-1 or j==m-1):
+                    if i==0:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j+1) * 32, (i) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j+1) * 32, (i) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j+1) * 32, (i) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j+1) * 32, (i) * 32))
+                    if j==0:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j) * 32, (i+1) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j) * 32, (i+1) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j) * 32, (i+1) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j) * 32, (i+1) * 32))
+                    if i==n-1:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j + 1) * 32, (i+2) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j + 1) * 32, (i+2) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j + 1) * 32, (i+2) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j + 1) * 32, (i+2) * 32))
+                    if j==m-1:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j+2) * 32, (i+1) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j+2) * 32, (i+1) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j+2) * 32, (i+1) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j+2) * 32, (i+1) * 32))
+                    if i==0 and j==0:
                         rand = math.floor(random.uniform(0, 4))
                         if rand == 0:
                             screen.blit(border_1_img, ((j) * 32, (i) * 32))
@@ -230,6 +271,36 @@ def game(n, m, map):
                             screen.blit(border_3_img, ((j) * 32, (i) * 32))
                         if rand == 3:
                             screen.blit(border_4_img, ((j) * 32, (i) * 32))
+                    elif i==0 and j==m-1:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j+2) * 32, (i) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j+2) * 32, (i) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j+2) * 32, (i) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j+2) * 32, (i) * 32))
+                    elif i==n-1 and j==0:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j) * 32, (i+2) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j) * 32, (i+2) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j) * 32, (i+2) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j) * 32, (i+2) * 32))
+                    elif i==n-1 and j==m-1:
+                        rand = math.floor(random.uniform(0, 4))
+                        if rand == 0:
+                            screen.blit(border_1_img, ((j+2) * 32, (i + 2) * 32))
+                        if rand == 1:
+                            screen.blit(border_2_img, ((j+2) * 32, (i + 2) * 32))
+                        if rand == 2:
+                            screen.blit(border_3_img, ((j+2) * 32, (i + 2) * 32))
+                        if rand == 3:
+                            screen.blit(border_4_img, ((j+2) * 32, (i + 2) * 32))
                     if (map[i][j] == 0):
                         screen.blit(tile_img, ((j+1) * 32, (i+1) * 32))
                     elif (map[i][j] == 1):

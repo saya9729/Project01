@@ -129,7 +129,11 @@ class Seeker:
         else:
             max_val = -1
             for i in range(8):
+<<<<<<< Updated upstream
                 if this.pos[0] + this.movement[i][0] >= 0 and this.pos[1] + this.movement[i][1] >= 0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] < this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+=======
+                if this.pos[0] + this.movement[i][0] >=0 and this.pos[1] + this.movement[i][1]>=0 and this.pos[0] + this.movement[i][0] < this.n and this.pos[1] + this.movement[i][1] <this.m and this.map[this.pos[0] + this.movement[i][0]][this.pos[1] + this.movement[i][1]] != 1:
+>>>>>>> Stashed changes
                     if this.tai_heuristic(i) > max_val:
                         max_val = this.tai_heuristic(i)
                         this.next_step = i
