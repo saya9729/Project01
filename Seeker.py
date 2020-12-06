@@ -79,10 +79,8 @@ class Seeker:
                     return
 
     def cal_distance(this, x, y):
-        return abs(this.a_coeff * x + this.b_coeff * y + this.c_coeff) / math.sqrt(
-            this.a_coeff ** 2 + this.b_coeff ** 2) if (this.a_coeff != 0 and this.b_coeff != 0) or abs(
-            this.a_coeff * x + this.b_coeff * y + this.c_coeff) / math.sqrt(
-            this.a_coeff ** 2 + this.b_coeff ** 2) != 0 else 1
+        return abs(float(this.a_coeff * x + this.b_coeff * y + this.c_coeff)) / math.sqrt(
+            this.a_coeff ** 2 + this.b_coeff ** 2) if (this.a_coeff != 0 or this.b_coeff != 0 and this.a_coeff!=this.b_coeff)  else 1.0
 
     def cal_line(this, hider_index):
         this.a_coeff = this.hider[hider_index].pos[1] - this.pos[1]
@@ -184,7 +182,7 @@ class Seeker:
         this.cal_line_2(x1, y1, x2, y2)
         for i in range(x_min, x_max + 1):
             for j in range(y_min, y_max + 1):
-                if this.map[i][j] == 1 and this.cal_distance(i, j) < this.hide_value:
+                if this.map[i][j] == 1 and (this.cal_distance(i, j) < this.hide_value):
                     return False
         return True
 
