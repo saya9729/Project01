@@ -13,6 +13,8 @@ pygame.init()
 # screenHeight = n # the number of tile in y axis
 screenWidth = 48  # the number of tile in x axis
 screenHeight = 24  # the number of tile in y axis
+#color
+WHITE = (255, 255, 255)
 
 speed = 1
 
@@ -169,19 +171,17 @@ def draw_data(n, m, map):
                         screen.blit(border_3_img, (j * 32, i * 32))
                     if rand == 3:
                         screen.blit(border_4_img, (j * 32, i * 32))
-        Print_score(m, str(seeker.score), 30)
+        Print_score(0, m/2, 30, WHITE, str(seeker.score))
         Print_result(m, n, seeker.score, map)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-def Print_score(m, score, size):
-    a = m/2
+def Print_score(x, y, size, color, score):
     font = pygame.font.SysFont(None, size)
-    WHITE = (255, 255, 255)
-    text = font.render(score, True, WHITE)
+    text = font.render(score, True, color)
     text_rect = text.get_rect()
-    text_rect.midtop = (a*32, 0)
+    text_rect.midtop = (y*32, x)
     screen.blit(text, text_rect)
 def Print_result(m,n, score, map):
     if (score <= 0):
