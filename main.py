@@ -14,4 +14,4 @@ for i in range(n):
         map[i][j] = int(line[i + 1].split()[j])
 
 
-draw.draw_data(n,m,map)
+draw.menu(n,m,map, map, map, map)
