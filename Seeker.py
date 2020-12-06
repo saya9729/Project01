@@ -177,30 +177,31 @@ class Seeker:
             return True
 
     def move(this):
-            this.score -= 1
-            if this.catch():
-                this.hider_caught[this.nearest_hider] = True
-                this.score += 20
-            this.map[this.pos[0]][this.pos[1]] = 0
-            this.pos[0] += this.movement[this.next_step][0]
-            this.pos[1] += this.movement[this.next_step][1]
-            this.map[this.pos[0]][this.pos[1]] = 3
-            this.update_seen()
+        this.remove_seen()
+        this.score -= 1
+        if this.catch():
+            this.hider_caught[this.nearest_hider] = True
+            this.score += 20
+        this.map[this.pos[0]][this.pos[1]] = 0
+        this.pos[0] += this.movement[this.next_step][0]
+        this.pos[1] += this.movement[this.next_step][1]
+        this.map[this.pos[0]][this.pos[1]] = 3
+        this.update_seen()
+
 
     def update_seen(this):
         for i in range(this.pos[0] - 3, this.pos[0] + 4):
             for j in range(this.pos[1] - 3, this.pos[1] + 4):
                 if i < 0 or j < 0 or i >= this.n or j >= this.m:
                     continue
-                if not this.visited[i][j]:
-                    if this.can_be_seen(this.pos[0],this.pos[1],i,j):
+                if this.can_be_seen(this.pos[0], this.pos[1], i, j):
+                    if not(i==this.pos[0] and j==this.pos[1]) and this.map[i][j]==0:
+                        this.map[i][j]=6
+                    if not this.visited[i][j]:
                         this.visited[i][j]=True
 
-    def Scan(this):
-        total = 0
+    def remove_seen(this):
         for i in range(this.n):
             for j in range(this.m):
-                if (this.map[i][j] == 2):
-                    total += 1
-        if (total == 0): return True
-        return False
+                if this.map[i][j]==6:
+                    this.map[i][j]=0
